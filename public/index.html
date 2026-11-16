@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#173e35">
+  <meta name="description" content="Your friends. Your island. Your rules. A multiplayer browser board game with a futures market and editable house rules.">
+  <title>Cataan · House Table</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Cataan House Table home"><span class="brand-mark" aria-hidden="true">⬡</span><span>CATAAN<small>HOUSE TABLE</small></span></a>
+    <div class="header-right"><span id="connection" role="status">Your friends. Your island. Your rules.</span><button id="home-button" class="button ghost light" hidden>Leave view</button></div>
+  </header>
+  <main>
+    <section id="welcome" class="welcome">
+      <div class="welcome-copy">
+        <p class="eyebrow">THE GAME NIGHT, REINVENTED</p>
+        <h1>Same old friends.<br>A whole new <em>island.</em></h1>
+        <p class="intro">Build a settlement. Make a deal. Trade tomorrow’s harvest today. Bring your house rules back to the table.</p>
+        <div class="feature-list"><span>01 <b>Play together</b> · 2–4 players</span><span>02 <b>Trade futures</b> · On anyone’s turn</span><span>03 <b>Make it yours</b> · Editable rules</span></div>
+        <div class="welcome-island" aria-hidden="true"><span class="mini-hex wood">♠</span><span class="mini-hex grain">♧</span><span class="mini-hex brick">▰</span><span class="mini-hex wool">♧</span><span class="mini-hex ore">▲</span><span class="mini-hex grain">♧</span><span class="mini-hex wood">♠</span></div>
+      </div>
+      <section class="entry-card" aria-labelledby="entry-title">
+        <p class="eyebrow">PULL UP A CHAIR</p><h2 id="entry-title">Welcome to the table.</h2>
+        <label>Your name<input id="player-name" maxlength="24" autocomplete="nickname" placeholder="What should we call you?" required></label>
+        <button id="create-button" class="button primary large">Create a table <span aria-hidden="true">↗</span></button>
+        <div class="divider"><span>or join your friends</span></div>
+        <form id="join-form"><label>Room code<input id="room-code" maxlength="8" autocomplete="off" placeholder="8-letter room code" class="code-input"></label><button class="button outline large" type="submit">Join table</button></form>
+        <p class="fine-print">One shared table. A private hand for every player.<br>No accounts or downloads needed for your friends.</p>
+      </section>
+    </section>
+    <section id="game" hidden>
+      <div class="table-heading"><div><p class="eyebrow">A LITTLE STRATEGY. A LOT OF DEALS.</p><h1>The house table<span id="room-label"></span></h1></div><div class="heading-actions"><button id="invite-button" class="button outline">Copy invite link ↗</button><button id="rules-button" class="button outline">House rules ⚙</button></div></div>
+      <div id="lobby-panel" class="lobby-banner" hidden></div>
+      <div class="game-layout">
+        <aside class="left-column"><section class="panel"><div class="panel-heading"><h2>At the table</h2><span id="player-count"></span></div><div id="players"></div></section><section class="panel legend-panel"><p class="eyebrow">THE ISLAND PROVIDES</p><div class="resource-legend"><span><i class="resource-dot wood"></i>Wood</span><span><i class="resource-dot brick"></i>Brick</span><span><i class="resource-dot wool"></i>Wool</span><span><i class="resource-dot grain"></i>Wheat</span><span><i class="resource-dot ore"></i>Ore</span></div><p class="muted">Build at intersections. Roads follow edges. Numbers produce resources when the dice agree.</p><div id="bank-stock"></div></section></aside>
+        <section class="board-column" aria-label="Game board and actions"><div class="board-surface"><div class="board-top"><span class="board-label">THE ISLAND</span><span id="turn-label"></span></div><div id="board"></div><div class="board-bottom"><span id="board-hint" role="status" aria-live="polite"></span><button id="cancel-tool" class="text-button" hidden>Cancel</button></div></div><div id="turn-controls" class="turn-controls"></div><div id="build-controls" class="build-controls"></div></section>
+        <aside class="right-column"><section class="panel market-panel"><div class="panel-heading"><div><p class="eyebrow">TOMORROW HAS VALUE</p><h2>The market</h2></div><span class="live-badge">LIVE</span></div><p class="muted">Strike a deal on any player’s turn.</p><button id="offer-button" class="button primary full">Make an offer <span aria-hidden="true">＋</span></button><div id="offers"></div><h3 class="subheading">Outstanding futures</h3><div id="futures"></div></section><section class="panel activity-panel"><div class="panel-heading"><h2>Table talk</h2><span class="muted">Activity</span></div><ol id="activity"></ol></section></aside>
+      </div>
+      <section class="hand-section" aria-labelledby="hand-title"><div class="hand-heading"><div><p class="eyebrow">A LITTLE SOMETHING UP YOUR SLEEVE</p><h2 id="hand-title">Your hand</h2></div><span class="muted">Visible only to you</span></div><div id="hand"></div><div id="development"></div></section>
+    </section>
+  </main>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="rules-dialog"><form id="rules-form"><div class="dialog-heading"><div><p class="eyebrow">YOUR TABLE, YOUR CALL</p><h2>House rules</h2></div><button type="button" class="close-button" data-close="rules-dialog" aria-label="Close rules">×</button></div><p class="muted">The host can edit these before the game starts. Renovation starts at 1 brick as a provisional price.</p><div id="rule-fields"></div><details><summary>Advanced rule pack</summary><label>Editable JSON<textarea id="rules-json" spellcheck="false" rows="12"></textarea></label><p class="muted">Changes here override the simple fields when “Use JSON” is selected.</p><label class="checkbox-row"><input type="checkbox" id="use-rule-json">Use JSON instead of the fields above</label></details><div class="dialog-actions"><button type="button" id="export-rules" class="button outline">Export JSON</button><label class="button outline import-label">Import JSON<input type="file" id="import-rules" accept=".json,application/json" hidden></label><button type="submit" id="save-rules" class="button primary">Save house rules</button></div></form></dialog>
+  <dialog id="trade-dialog"><form id="trade-form"><div class="dialog-heading"><div><p class="eyebrow">MAKE TOMORROW’S DEAL, TODAY</p><h2>Make an offer</h2></div><button type="button" class="close-button" data-close="trade-dialog" aria-label="Close trade">×</button></div><label>Trade with<select id="trade-partner"></select></label><div class="trade-columns"><section><h3>You give</h3><div id="give-cards"></div><div id="give-futures"></div><button type="button" class="text-button" data-add-future="give">＋ Add future deliveries</button></section><section><h3>You receive</h3><div id="want-cards"></div><div id="want-futures"></div><button type="button" class="text-button" data-add-future="want">＋ Add future deliveries</button></section></div><p class="muted">Future #1 means the next incoming resource after this trade completes. Trades, theft, bank exchanges, production, and future payments all count. Accepted promises settle automatically.</p><div class="dialog-actions"><button type="submit" class="button primary">Post offer</button></div></form></dialog>
+  <dialog id="bank-dialog"><form id="bank-form"><div class="dialog-heading"><h2>Trade with the bank</h2><button type="button" class="close-button" data-close="bank-dialog" aria-label="Close bank trade">×</button></div><div class="form-grid"><label>You give<select id="bank-give"></select></label><label>You receive<select id="bank-receive"></select></label><label>Number to receive<input id="bank-count" type="number" min="1" max="10" value="1"></label></div><p id="bank-preview" class="muted"></p><p class="muted">Incoming cards settle your existing futures before reaching your hand.</p><div class="dialog-actions"><button type="submit" class="button primary">Trade</button></div></form></dialog>
+  <dialog id="discard-dialog"><form id="discard-form"><div class="dialog-heading"><h2>Return resources</h2></div><p id="discard-instruction"></p><div id="discard-fields"></div><div class="dialog-actions"><button type="submit" class="button primary">Discard selected cards</button></div></form></dialog>
+  <dialog id="development-dialog"><form id="development-form"><div class="dialog-heading"><h2 id="development-title"></h2><button type="button" class="close-button" data-close="development-dialog" aria-label="Close development card">×</button></div><div id="development-fields"></div><div class="dialog-actions"><button type="submit" class="button primary">Play card</button></div></form></dialog>
+  <footer>A familiar island. A few new possibilities. <span>Cataan · House Table</span></footer>
+</body>
+</html>

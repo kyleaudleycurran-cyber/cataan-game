@@ -148,4 +148,4 @@ node tests/browser-smoke.mjs
 
 ## First-version scope
 
-No bots, matchmaking, account system, spectators, midgame player replacement, expansion boards, or multiplayer spectators are included. A room supports one ongoing game; create another table for a new game. Hosting and browser screenshots still need to be reviewed on the chosen deployment. The app uses original SVG/CSS visuals and no official game artwork.
+No bots, matchmaking, account system, spectators, midgame player replacement, or expansion boards are included. A room supports one ongoing game; create another table for a new game. Hosting and browser screenshots still need to be reviewed on the chosen deployment. The app uses original SVG/CSS visuals and no official game artwork.
